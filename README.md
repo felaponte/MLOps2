@@ -94,4 +94,7 @@ curl -X 'POST' 'http://localhost:8989/predict' \
 
 Se configuró el repositorio y se creó la rama mi-version para no afectar main
 
+ # Conclusiones
 
+- Se logró implementar una API funcional para predecir la masa corporal de los pingüinos.
+- Se desplegó en un contenedor Docker y se verificó su funcionamiento.
