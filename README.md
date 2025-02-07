@@ -8,8 +8,9 @@ Este proyecto implementa un modelo de predicción de la masa corporal de pingüi
 MLOps_PUJ/
 │── FastAPI/                 # Código de la API en FastAPI
 │── Docker/                  # Archivos relacionados con Docker
-│── modelo_rf.pkl            # Modelo Random Forest entrenado
-│── modelo_gb.pkl            # Modelo Gradient Boosting entrenado
+│── modelo_entrenado.pkl     # 1° Modelo Random Forest Regressor entrenado 
+|── modelo_rf.pkl            # 2° Modelo Random Forest entrenado después de prerpocesamiento
+│── modelo_gb.pkl            # 2° Modelo Gradient Boosting entrenado después de prerpocesamiento
 │── train.py                 # Script de entrenamiento del modelo
 │── preprocesamiento.py      # Preprocesamiento de datos
 │── api.py                   # Implementación de la API con FastAPI
@@ -29,90 +30,68 @@ MLOps_PUJ/
 - Docker
 
 ---
+# Desarrollo del taller
+# 1. Preparación del entorno
+Se configuró un ambiente virtual en conda
+conda create --name mlops python=3.9 -y
+conda activate mlops
 
-## Instalación y Configuración
-
-### Clonar el repositorio
-```sh
-git clone -b mi-version https://github.com/felaponte/MLOps2.git
-cd MLOps2
-```
-
-### Configurar el entorno virtual (opcional)
-```sh
-python -m venv venv
-source venv/bin/activate  # En Linux/Mac
-venv\Scripts\activate     # En Windows
-```
-
-### Instalar dependencias
-```sh
+Se instalaron las dependencias necesarias.
+# Instalación de dependencias
 pip install -r requirements.txt
-```
 
----
+# Preprocesamiento de Datos
 
-## Ejecución con Docker
+- Se cargó el dataset penguins_lter.csv
+- Se manejaron valores nulos y se realizó One-Hot Encoding para variables categóricas.
+- Se dividieron los datos en entrenamiento y prueba.
 
-### 1. Construir la imagen Docker
+# Entrenamiento del Modelo
+
+- Se probaron varios modelos: RandomForestRegressor y GradientBoostingRegressor.
+- Se evaluaron con RMSE, seleccionando el mejor modelo (modelo_entrenado.pkl).
+
+# Creación de la API con FastAPI
+
+Se definió la API con FastAPI, exponiendo un endpoint POST /predict.
+
+@app.post("/predict")
+def predict(data: InputData):
+    resultado = modelo.predict([[data.Culmen_Length_mm, data.Culmen_Depth_mm, data.Flipper_Length_mm]])
+    return {"predicted_body_mass": resultado[0]}
+
+# Dockerización de la API
+Se creó un Dockerfile con la siguiente configuración:
+FROM python:3.9
+WORKDIR /app
+COPY . .
+RUN pip install --no-cache-dir -r requirements.txt
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8989"]
+
+Se construyo la imagen y se ejecutó el contenedor:
+
+# Construir la imagen Docker
 ```sh
 docker build -t mi-api-pinguinos .
 ```
-
-### 2. Ejecutar el contenedor
+# Ejecutar el contenedor
 ```sh
 docker run -p 8989:8989 --name contenedor-api mi-api-pinguinos
 ```
+# Uso de la API
+- Se verificó la API en http://localhost:8989
+- Se probó una predicción con curl:
+curl -X 'POST' 'http://localhost:8989/predict' \
+     -H 'Content-Type: application/json' \
+     -d '{"Culmen_Length_mm": 45.3, "Culmen_Depth_mm": 17.5, "Flipper_Length_mm": 200}'
 
----
-
-## Uso de la API
-
-### 1️. Verificar el estado de la API
-Abre en el navegador:
-```
-http://localhost:8989/
-```
-Debe responder:
-```json
-{"message":"¡API de predicción de pingüinos en funcionamiento!"}
-```
-
-### 2️. Hacer una predicción
-Ejecuta en la terminal:
-```sh
-curl -X 'POST'
-  'http://localhost:8989/predict'
-  -H 'accept: application/json'
-  -H 'Content-Type: application/json'
-  -d '{
-  "Culmen_Length_mm": 45.3,
-  "Culmen_Depth_mm": 17.5,
-  "Flipper_Length_mm": 200
-}'
-```
-
-Ejemplo de respuesta:
+  Ejemplo de respuesta:
 ```json
 {"predicted_body_mass": 3814.5}
 ```
-
 ---
+# Subida a GitHub
 
-## Depuración
-Si el contenedor no funciona correctamente, revisa los logs:
-```sh
-docker logs contenedor-api
-```
-
----
-
-## Contribuciones
-Si deseas mejorar este proyecto, crea una **pull request** en la rama `mi-version`.
-
----
-
-
- 
+Se configuró el repositorio y se creó la rama mi-version para no afectar main
 
 
