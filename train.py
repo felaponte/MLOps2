@@ -6,7 +6,7 @@ from sklearn.metrics import mean_squared_error
 import joblib  # Para guardar el modelo entrenado
 
 # Cargar los datos desde el archivo CSV
-df = pd.read_csv("penguins_lter.csv")  # Asegúrate de que el archivo esté en la misma carpeta
+df = pd.read_csv("penguins_lter.csv")
 
 # Mostrar las primeras filas para revisar la estructura
 print("Primeras filas del dataset:")
@@ -20,7 +20,6 @@ print(df.columns)
 df = df.dropna()
 
 # Seleccionar las columnas relevantes
-# Asegurarse de que las variables de entrada son las correctas
 X = df[["Culmen Length (mm)", "Culmen Depth (mm)", "Flipper Length (mm)"]]  # Solo columnas relevantes
 y = df["Body Mass (g)"]  # Variable de salida
 
