@@ -33,13 +33,16 @@ MLOps_PUJ/
 
 ## 1. Clonar el Repositorio
 Se clonó el repositorio original donde se encontraba la estructura base del taller
+```
 git clone https://github.com/CristianDiazAlvarez/MLOPS_PUJ.git
 cd MLOPS_PUJ/Niveles/0
-
+```
 ## 2. Preparación del entorno
 Se configuró un ambiente virtual en conda
+```
 conda create --name mlops python=3.9 -y
 conda activate mlops
+```
 - Se crea un entorno llamado mlops con Python 3.9.
 - Se activa el entorno para instalar dependencias sin afectar el sistema
 
@@ -63,20 +66,21 @@ pip install -r requirements.txt
 ## 6. Creación de la API con FastAPI
 
 Se definió la API con FastAPI, exponiendo un endpoint POST /predict.
-
+```
 @app.post("/predict")
 def predict(data: InputData):
     resultado = modelo.predict([[data.Culmen_Length_mm, data.Culmen_Depth_mm, data.Flipper_Length_mm]])
     return {"predicted_body_mass": resultado[0]}
-
+```
 ## 7. Dockerización de la API
 Se creó un Dockerfile con la siguiente configuración:
+```
 FROM python:3.9
 WORKDIR /app
 COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8989"]
-
+```
 Se construyo la imagen y se ejecutó el contenedor:
 
 ## 8. Construir la imagen Docker
