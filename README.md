@@ -98,7 +98,6 @@ curl -X 'POST' 'http://localhost:8989/predict' \
 ```json
 {"predicted_body_mass": 3814.5}
 ```
----
 ## 11. Subida a GitHub
 
 Se configuró el repositorio y se creó la rama mi-version para no afectar main
