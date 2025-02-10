@@ -44,7 +44,7 @@ conda activate mlops
 - Se crea un entorno llamado mlops con Python 3.9.
 - Se activa el entorno para instalar dependencias sin afectar el sistema
 
-3# 3. Instalación de dependencias
+## 3. Instalación de dependencias
 Dentro del entorno virtual, se instalaron las librerías necesarias:
 pip install -r requirements.txt
 - Se usó un archivo requirements.txt para instalar las librerías necesarias como FastAPI, scikit-learn, numpy, etc.
