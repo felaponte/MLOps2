@@ -1,10 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Query
 import joblib
 import pandas as pd
 from pydantic import BaseModel
 
-# Cargar el modelo entrenado
-modelo = joblib.load("modelo_entrenado.pkl")
+# Cargar ambos modelos
+modelos = {
+    "gradient_boosting": joblib.load("modelo_gb.pkl"),
+    "random_forest": joblib.load("modelo_rf.pkl"),
+}
 
 # Crear una instancia de FastAPI
 app = FastAPI()
@@ -22,7 +25,11 @@ def home():
 
 # Ruta para hacer predicciones
 @app.post("/predict")
-def predict(data: InputData):
+def predict(data: InputData, modelo_elegir: str = Query("gradient_boosting", enum=["gradient_boosting", "random_forest"])):
+    
+    if modelo_elegir not in modelos:
+        raise HTTPException(status_code=400, detail="Invalid model type. Choose 'gradient_boosting' or 'random_forest'.")
+    
     # Convertir los datos de entrada en un DataFrame y asegurarse de que coinciden con el modelo
     df = pd.DataFrame([data.dict()])
 
@@ -33,7 +40,11 @@ def predict(data: InputData):
         "Flipper_Length_mm": "Flipper Length (mm)"
     })
 
+    #Uso de modelo elegido
+
+    modelo = modelos[modelo_elegir]
+
     # Hacer la predicción
     prediction = modelo.predict(df)[0]
 
-    return {"predicted_body_mass": prediction}
+    return {"modelo usado": modelo_elegir, "predicted_body_mass": prediction}

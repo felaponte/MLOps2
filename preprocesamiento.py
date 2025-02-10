@@ -26,7 +26,7 @@ for col in cat_cols:
 df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
 
 # Separar variables predictoras (X) y la variable objetivo (y)
-X = df.drop(columns=["Body Mass (g)"])
+X = df[["Culmen Length (mm)", "Culmen Depth (mm)", "Flipper Length (mm)"]]  # Solo columnas relevantes
 y = df["Body Mass (g)"]
 
 # Dividir en conjunto de entrenamiento y prueba (80%-20%)
