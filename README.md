@@ -29,7 +29,6 @@ MLOps_PUJ/
 - Pandas & NumPy
 - Docker
 
----
 # Desarrollo del taller
 
 ## 1. Clonar el Repositorio
