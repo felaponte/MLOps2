@@ -41,7 +41,6 @@ def predict(data: InputData, modelo_elegir: str = Query("gradient_boosting", enu
     })
 
     #Uso de modelo elegido
-
     modelo = modelos[modelo_elegir]
 
     # Hacer la predicción
