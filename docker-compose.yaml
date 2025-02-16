@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  jupyter:
+    image: jupyter/scipy-notebook
+    container_name: jupyter_notebook
+    ports:
+      - "8888:8888"
+    volumes:
+      - './volumen:/volumen' 
+    environment:
+      - JUPYTER_ENABLE_LAB=yes  # Enable JupyterLab UI
+    command: start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''
+
+  api:
+    build: .
+    container_name: fastapi_server
+    ports:
+      - "8000:8000"
+    volumes:
+      - './volumen:/volumen' 
+    command: uvicorn api:app --host 0.0.0.0 --port 8989 --reload
+
