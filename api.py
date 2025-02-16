@@ -5,7 +5,7 @@ from pydantic import BaseModel
 import os
 
 # Directorio de volumen con los modelos 
-volumen = "./volumen"
+volumen = "/volumen"
 
 #Cargar modelos dinamicamente 
 def cargar_modelos():
