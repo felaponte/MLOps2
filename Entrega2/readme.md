@@ -49,21 +49,23 @@ git clone https://github.com/felaponte/MLOps2.git
 cd MLOps2
 cd Entrega2
 ```
-## 2. Preparación del entorno
-Se configuró un ambiente virtual en conda
+## 2. Ejecución servicio de Machine learning
+Se inicia el servicio que nos va permitir preprocesar y entrenar los modelos
 ```
-conda create --name mlops python=3.9 -y
-conda activate mlops
-```
-
 sudo docker compose up --build ml_service
+```
+Este servicio va abrir un Jupyter Notebook en el puerto 8888 donde vamos a poder ejecutar los notebooks.
+Primero ejecutaríamos el notebook preprocesamiento.ipynb para generar los archivos en entrenamiento y test en la carpeta data/.
+Y luego ejecutamos el notebook entrenar_modelos.ipynb para generar los archivos .pkl en la carpeta data/ que serán finalmente usados por la api.
 
-- Se crea un entorno llamado mlops con Python 3.9.
-- Se activa el entorno para instalar dependencias sin afectar el sistema
+## 3. Ejecución servicio de API
+Se inicia el servicio que nos va a permitir usar la API
+```
+sudo docker compose up --build ml_service
+```
+Este servicio va a desplegar la API en el puerto 8989 donde vamos a poder hacer la inferencia con los modelos entrenados del paso anterior.
+Esta API reconoce los archivos .pkl que fueron entrenados anteriormente. Si se hubiesen entrenados más modelos la API está en la capacidad de reconocerlos.
+Esta API es necesario escoger el modelo a usar y pasarle los parámetros "Culmen_Length_mm", "Culmen_Depth_mm", "Flipper_Length_mm" para poder realizar la inferencia.
 
-## 3. Instalación de dependencias
-Dentro del entorno virtual, se instalaron las librerías necesarias:
-pip install -r requirements.txt
-- Se usó un archivo requirements.txt para instalar las librerías necesarias como FastAPI, scikit-learn, numpy, etc.
-- Esto garantiza que el entorno tenga las mismas dependencias en cualquier máquina.
+
 
