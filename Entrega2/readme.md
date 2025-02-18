@@ -61,7 +61,7 @@ Y luego ejecutamos el notebook entrenar_modelos.ipynb para generar los archivos 
 ## 3. Ejecución servicio de API
 Se inicia el servicio que nos va a permitir usar la API
 ```
-sudo docker compose up --build ml_service
+sudo docker compose up --build api_service
 ```
 Este servicio va a desplegar la API en el puerto 8989 donde vamos a poder hacer la inferencia con los modelos entrenados del paso anterior.
 Esta API reconoce los archivos .pkl que fueron entrenados anteriormente. Si se hubiesen entrenados más modelos la API está en la capacidad de reconocerlos.
