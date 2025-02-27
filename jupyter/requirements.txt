@@ -1,0 +1,5 @@
+jupyterlab==3.6.1
+pandas
+numpy
+scikit-learn
+tensorflow-data-validation  # Si usarás TFDV para estadísticas y validación

@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+  jupyter_svc:
+    build: ./jupyter
+    container_name: jupyter_lab
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./models:/models
+      - ./notebooks:/home/jovyan/work
+    
+  pipeline_svc:
+    build: ./pipeline
+    container_name: pipeline_api
+    ports:
+      - "8000:80"
+    volumes:
+      - ./models:/models
