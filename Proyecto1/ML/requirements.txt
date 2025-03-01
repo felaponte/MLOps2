@@ -6,5 +6,4 @@ scikit-learn
 tensorflow
 tensorflow_data_validation
 tfx
-apache-beam==2.45.0
 pip
