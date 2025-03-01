@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  ml_service:
+    build: ./ML
+    ports:
+      - "8888:8888"
+    volumes:
+      - './data:/ml_project/data'
+      - './ML/notebooks:/ml_project/notebooks'
+    # Run Jupyter Notebook when the container launches
+    command: ["uv","run","jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--allow-root"] 
