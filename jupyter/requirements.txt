@@ -1,6 +1,6 @@
 jupyterlab==3.6.1
 pandas
-numpy
+numpy<2
 scikit-learn
 matplotlib
 seaborn
