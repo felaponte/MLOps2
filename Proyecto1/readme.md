@@ -86,7 +86,7 @@ Contiene los artefactos generados por TensorFlow Extended (TFX), como salidas de
 1. Clonar el repositorio o descargarlo en tu máquina local
 
 ```bash
-git clone -b proyecto1_version_santiago https://github.com/felaponte/MLOps2.git
+git clone https://github.com/felaponte/MLOps2.git
 
 cd MLOps2/Proyecto1
 
