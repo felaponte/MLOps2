@@ -1,0 +1,9 @@
+jupyter
+jupyterlab
+numpy==1.23.5
+pandas==1.5.3
+scikit-learn
+tensorflow
+tensorflow_data_validation
+tfx
+pip
