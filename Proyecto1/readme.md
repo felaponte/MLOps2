@@ -5,7 +5,7 @@
 
 ## Resumen del proyecto:
 
-Este proyecto consiste en la creación de un entorno de desarrollo para Machine Learning capaz de ingerir, validar y transformar datos, al tiempo que se demuestra el versionado de código y del ambiente (mediante Docker y Docker Compose). Se utiliza Docker para garantizar reproducibilidad y se implementa un pipeline con TFX. El dataset utilizado es una versión modificada del conjunto de datos **Tipo de Cubierta Forestal**, enfocado en predecir el tipo de cobertura forestal mediante variables cartográficas.
+Este proyecto consiste en la creación de un entorno de desarrollo para Machine Learning capaz de ingerir, validar y transformar datos, al tiempo que se demuestra el versionado de código y del ambiente (mediante Docker y Docker Compose). Se utiliza Docker para garantizar reproducibilidad y se implementa un pipeline con TensorFlow Extended (TFX). El dataset utilizado es una versión modificada del conjunto de datos **Tipo de Cubierta Forestal**, enfocado en predecir el tipo de cobertura forestal mediante variables cartográficas.
 
 Se construye una canalización de datos que abarca:
 
@@ -25,8 +25,8 @@ Se construye una canalización de datos que abarca:
 Proyecto_1/
 ├─ data/
 │  ├─ dataset/
-│  │  └─ data_transformed.csv      # CSV final 
-│  └─ readme.md
+│     └─ data_transformed.csv      # CSV final 
+│  
 │
 │  ├─pipeline/
 │  ├─ CsvExampleGen/
@@ -35,20 +35,20 @@ Proyecto_1/
 │  ├─ SchemaGen/
 │  ├─ StatisticsGen/
 │  ├─ Transform/
-│  ├─ metadata.sqlite              # Base de datos 
+│  ├─ metadata.sqlite              # DB de metadatos de ML
 │  └─ ...
 ├─ ML/
-│  ├─ notebooks/
-│  ├─ preprocesamiento.ipynb       # Notebook principal de ingesta, validación, transform 
-│  ├─ census_constants.py          # Ejemplo de constantes para la función de preprocesamiento
-│  ├─ census_transform.py          # Ejemplo de preprocessing_fn
+│  ├── Dockerfile                  # Definición de la imagen base de Python + TFX 
+│  ├── requirements.txt            # Librerías Python necesarias
+│  └── notebooks/                  # Scripts .py y Notebooks .ipynb
+│     ├─ preprocesamiento.ipynb       # Notebook principal de ingesta, validación, transform 
+│     ├─ census_constants.py          # Ejemplo de constantes para la función de preprocesamiento
+│     ├─ census_transform.py          # Ejemplo de preprocessing_fn
 │
-│  └─ covertype_train.csv          # CSV original
+│     └─ covertype_train.csv          # CSV original
 │
-├─ docker-compose.yml
-├─ Dockerfile
-├─ requirements.txt
-└─ readme.md                       
+├─ docker-compose.yml                 #Orquestación de contenedores
+└─ readme.md                          # Este archivo de documentación
 ```
 
 ---
@@ -136,4 +136,43 @@ Si pide un token, revisa el log que imprime Docker Compose o la consola del cont
     7. Exploración de ML Metadata
     
 Todas estas ejecuciones se reflejan en la carpeta pipeline/.
+---
+## Uso del Volumen y Persistencia
 
+* El docker-compose.yml mapea:
+    * ./data:/ml_project/data
+    * ./ML/notebooks:/ml_project/notebooks
+* Esto significa que cualquier cambio en local dentro de la carpeta data/ o ML/notebooks/ será visible en el contenedor, y viceversa.
+---
+## Limpieza
+
+Para detener y eliminar contenedor(s) y red asociada, ejecuta:
+```bash
+docker-compose down
+```
+
+Si deseas eliminar también la imagen creada:
+
+```bash
+docker-compose down --rmi all
+```
+
+---
+## Notas Adicionales
+
+* El pipeline usa TensorFlow Extended (TFX) y sus componentes (CsvExampleGen, StatisticsGen, SchemaGen, ExampleValidator, Transform, etc.) para crear un flujo reproducible de datos y metadatos de ML.
+* El archivo metadata.sqlite registra la procedencia de los artefactos. Puedes inspeccionarlo para entender qué data se ha procesado y en qué etapas.
+* Si necesitas agregar más dependencias, edita ML/requirements.txt y reconstruye:
+
+```bash
+docker-compose build
+docker-compose up -d
+```
+## ¡Listo!
+
+Con este entorno, podrás ejecutar notebooks de TFX para:
+
+1. Ingerir y validar datos.
+2. Generar estadísticas y esquemas.
+3. Preprocesar, transformar y crear features.
+4. Rastrear metadatos (MLMD).
