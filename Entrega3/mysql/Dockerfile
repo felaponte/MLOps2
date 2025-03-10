@@ -3,11 +3,7 @@ FROM mysql:8.0
 # Instalar Python y dependencias necesarias para compilar e instalar UV
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
-    ca-certificates \
-    python3 \
-    python3-dev \
-    build-essential
-
+    ca-certificates
 #------------------------------------INSTALL UV---------------------------------------
 # Descargar el instalador de UV
 ADD https://astral.sh/uv/install.sh /uv-installer.sh
