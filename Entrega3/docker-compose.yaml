@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  mysql:
+    build: ./mysql
+    container_name: dbmlops
+    environment:
+      - MYSQL_ROOT_PASSWORD=mlops
+      - MYSQL_DATABASE=mydb
+    volumes:
+      - './data:/mysql_project/data'
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  ml_service:
+    build: ./ML
+    container_name: ml_service
+    environment:
+      # Puedes agregar variables de entorno propias para Airflow si es necesario
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+    ports:
+      - "8080:8080"
+    volumes:
+      - './data:/ml_project/data'
+      - './ML/dags:/opt/airflow/dags'  # Ajusta la ruta de tus DAGs según corresponda
+    depends_on:
+      - mysql
+    # Comando para iniciar Airflow en modo standalone (scheduler y webserver)
+    command: ["uv", "run", "airflow", "standalone"]
+
+  api_service:
+    build: ./API
+    container_name: api_service
+    ports:
+      - "8989:8989"
+    volumes:
+      - './data:/api/data'
+    depends_on:
+      - mysql
+    # Comando para ejecutar la API con Uvicorn
+    command: ["uv", "run", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8989"]
+
+volumes:
+  mysql_data:
