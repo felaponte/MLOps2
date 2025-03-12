@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 ### Taller 3 Airflow - MLOps PUJ
 
 Este proyecto implementa un modelo de predicción de la masa corporal de pingüinos. Para este objetivo se implementarán 3 servicios con docker. El primer contenedor es una conexión a una instancia sql donde vamos a mantener nuestras tablas para el preprocesamiento y el entrenamiento del modelo.
