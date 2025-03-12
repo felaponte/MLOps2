@@ -1,35 +1,43 @@
 <<<<<<< HEAD
 
-=======
-### Taller 2 - MLOps PUJ
+### Taller 3 Airflow - MLOps PUJ
 
-Este proyecto implementa un modelo de predicción de la masa corporal de pingüinos usando FastAPI para la API y Docker para contenerizar la aplicación. Se utilizó UV para hacer la gestión de dependencias. Y mediante Se incluyen las etapas de preprocesamiento, entrenamiento y delo.
+Este proyecto implementa un modelo de predicción de la masa corporal de pingüinos. Para este objetivo se implementarán 3 servicios con docker. El primer contenedor es una conexión a una instancia sql donde vamos a mantener nuestras tablas para el preprocesamiento y el entrenamiento del modelo.
+El segundo contenedor ejecuta una instancia de Airflow la cual tiene un dag con las siguientes tareas:
+    1 Borra los archivos
+    2 Carga archivos a mysql
+    3 Preprocesamiento del dataset como tabla importada de mysql
+    4 Entrenamiento de modelos y carga de estos al volumen.
+Finalmente tenemos un tercer servicio para despliegue de la Api que nos va permitir realizar la inferencia.
+
+## Consideraciones Generales
+- Para la instalación de dependencias en Airflow se uso PIP. No fue posible usar UV ya que necesitaba un usuario root para conectarse a mySQL, y como el usuario que requería Airflow en el Dockerfile se definía como Airflow y cuando se ejecuta cualquier conexión a mysql, obteníamos errores. Con PIP se evitó trabajar con usuario Root y solo el definido en el Dockerfile de Airflow como user=Airflow
+- Se deben definir variables de entorno para que Airflow permita la conexión al volumen. Las variables son las siguientes:
+                 echo -e "AIRFLOW_UID=$(id -u)" > .env
+                 echo -e "AIRFLOW_PROJ_DIR=./Airflow" >> .env
+- Se ajustó el directorio de build en el docker compose.yaml para que se basara en el Dockerfile personalizado por nosotros.            
 
 ## Estructura del Proyecto
 
 ```
-Entrega2/
-│── docker-compose.yaml        # Archivo de docker compose
-│── README.md                  # Documentación del proyecto
-│── API/                       # Carpeta con los archivos del servicio de API
-│──── api.py                   # Implementación de la API con FastAPI
-│──── requirements.txt         # Dependencias necesarias para la API
-│──── Dockerfile               # Dockerfile para contenerizar la API
-│── ML/                        # Carpeta con los archivos del servicio de ML
-│──── preprocesamiento.ipynb   # Notebook de preprocesamiento de datos que generan los archivos de entrenamiento y prueba
-│──── entrenar_modelos.ipynb   # Notebook de entrenamiento de modelos que generan los archivos .pkl de Random Forest y Gradient Boostng
-│──── requirements.txt         # Dependencias necesarias para el modelo de ML
-│──── Dockerfile               # Dockerfile para contenerizar el modelo de ML
-│──── penguins_iter.csv        # Data inicial
-│── data/                      # Volumen de datos NO volátiles
-│──── X_train.csv & y_train.csv      # Datos de entrenamiento que son generados por el notebook preprocesamiento.ipynb
-│──── X_test.csv & y_test.csv        # Datos de prueba que son generados por el notebook preprocesamiento.ipynb
-|──── modelo_random_forest.pkl       # Modelo Random Forest entrenado después del preprocesamiento que es generado por el notebook entrenar_modelos.ipynb.
-│──── modelo_gradient_boosting.pkl   # Modelo Gradient Boosting entrenado después del preprocesamiento que es generado por el notebook entrenar_modelos.ipynb.
-
+Entrega3_Airflow/
+├── Airflow/    # Todo lo de Airflow (dags, logs, plugins)
+| ├─ dags/
+│   ├── 3.py
+| ├─ files/   # Volumen donde se van a guardar los modelos para alimentar el API.
+│   ├── penguins_lter.csv
+| ├─ Dockerfile
+| ├─ Requirements.txt 
+├── API/
+│     ├── api.py
+│     ├── Dockerfile  (si necesitas construir una imagen personalizada para la API)
+│     └── requirements.txt
+|
+|── docker-compose.yaml
+│── .env
+└── README.md
 ```
 # Tecnologías Utilizadas
-
 - Python 3.9
 - FastAPI
 - Scikit-Learn
@@ -38,7 +46,10 @@ Entrega2/
 - Docker
 - Jupyter y Jupyter notebook
 - UV
-
+- PIP
+- Mysql
+- PostgresSQL
+- Airflow
 ---
 # Instrucciones
 
@@ -47,25 +58,27 @@ Se clona el repositorio
 ```
 git clone https://github.com/felaponte/MLOps2.git
 cd MLOps2
-cd Entrega2
+cd Entrega3_Airflow
 ```
-## 2. Ejecución servicio de Machine learning
-Se inicia el servicio que nos va permitir preprocesar y entrenar los modelos
+## 2. Estableciemiento variables de entorno
+Se debe ejecutar los siguientes dos comandos para definir las variables de entorno para Airflow
 ```
-sudo docker compose up --build ml_service
+echo -e "AIRFLOW_UID=$(id -u)" > .env
+echo -e "AIRFLOW_PROJ_DIR=./Airflow" >> .env
 ```
-Este servicio va abrir un Jupyter Notebook en el puerto 8888 donde vamos a poder ejecutar los notebooks.
-Primero ejecutaríamos el notebook preprocesamiento.ipynb para generar los archivos en entrenamiento y test en la carpeta data/.
-Y luego ejecutamos el notebook entrenar_modelos.ipynb para generar los archivos .pkl en la carpeta data/ que serán finalmente usados por la api.
-
-## 3. Ejecución servicio de API
-Se inicia el servicio que nos va a permitir usar la API
+## 3. Creación de las imágenes 
+Se inician todos los servicios.
 ```
-sudo docker compose up --build ml_service
+sudo docker compose up --build 
 ```
-Este servicio va a desplegar la API en el puerto 8989 donde vamos a poder hacer la inferencia con los modelos entrenados del paso anterior.
-Esta API reconoce los archivos .pkl que fueron entrenados anteriormente. Si se hubiesen entrenados más modelos la API está en la capacidad de reconocerlos.
-Esta API es necesario escoger el modelo a usar y pasarle los parámetros "Culmen_Length_mm", "Culmen_Depth_mm", "Flipper_Length_mm" para poder realizar la inferencia.
+El primer servicio va crear una instancia mysql en el puerto 3086. 
+El segundo servicio es una instancia de Airflow con un dag que tiene 4 task. El dag se debe ejecutar de manera manual. Los procesos son los siguientes: 
+    - Borrar contenido base de datos
+    - Cargar datos de penguins a la base de datos en mysql como una tabla.
+    - Realizar preprocesamiento para entrenamiento de modelo con la tabla del paso anterior y carga las tablas de train y test para X y y.
+    - Realiza entrenamiento de modelo usando las tablas generadas anteriormente y guarda los modelos entrenados como archivos .pkl en el volumen.
+El tercer serviciova a desplegar la API en el puerto 8989 donde vamos a poder hacer la inferencia con los modelos entrenados del paso anterior.
+Esta API reconoce los archivos .pkl que fueron entrenados anteriormente. Es necesario escoger el modelo a usar y pasarle los parámetros "Culmen_Length_mm", "Culmen_Depth_mm", "Flipper_Length_mm" para poder realizar la inferencia.
 
 
 
