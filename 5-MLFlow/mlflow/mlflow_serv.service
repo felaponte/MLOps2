@@ -1,0 +1,20 @@
+[Unit]
+Description=MLflow tracking server
+After=network.target 
+
+[Service]
+User=santiago1996
+Restart=on-failure
+RestartSec=3
+WorkingDirectory=/home/santiago1996/Documents/MLOps/Ejercicios_clase_y_Entregas/5-MLFlow/mlflow
+Environment=MLFLOW_S3_ENDPOINT_URL=http://localhost:9000
+Environment=AWS_ACCESS_KEY_ID=admin
+Environment=AWS_SECRET_ACCESS_KEY=supersecret
+ExecStart= python3 -m mlflow server \
+--backend-store-uri mysql+pymysql://user:password@localhost:3306/db_mlflow \
+--default-artifact-root s3://mlflows3/artifacts \
+--host 0.0.0.0 \
+--serve-artifacts
+
+[Install]
+WantedBy=multi-user.target
