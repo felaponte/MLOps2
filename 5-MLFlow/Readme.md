@@ -17,7 +17,7 @@ ssh estudiante@10.43.101.162
 ```
 # 2. Ir a la carpeta del proyecto:
 ```
-cd /home/estudiante/Documents/MLOps2/Entrega4_mlflow
+cd /home/estudiante/Documents/MLOps2/5_MLFlow
 ```
 ## Estructura del proyecto
 ```
