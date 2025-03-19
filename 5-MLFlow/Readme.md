@@ -1,4 +1,4 @@
- ### Taller MLflow
+### Taller MLflow
 
 MLflow es una plataforma de código abierto para administrar el ciclo de vida completo del aprendizaje automático. En este proyecto se implementan los siguientes pasos:
 
@@ -9,7 +9,7 @@ MLflow es una plataforma de código abierto para administrar el ciclo de vida co
 5. Registro de modelos en el Model Registry de MLflow, y cambio de etapa a “Production”.
 6. API de inferencia (con FastAPI), que carga el modelo directamente desde el Model Registry en producción.
 
-### 0. Acceso y ubicación del proyecto en la máquina virtual
+## 0. Acceso y ubicación del proyecto en la máquina virtual
 # 1. Entrar a la máquina virtual:
 ```
 ssh estudiante@10.43.101.162
