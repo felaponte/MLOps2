@@ -10,6 +10,7 @@ MLflow es una plataforma de código abierto para administrar el ciclo de vida co
 6. API de inferencia (con FastAPI), que carga el modelo directamente desde el Model Registry en producción.
 
 ## 0. Acceso y ubicación del proyecto en la máquina virtual
+
 # 1. Entrar a la máquina virtual:
 ```
 ssh estudiante@10.43.101.162
