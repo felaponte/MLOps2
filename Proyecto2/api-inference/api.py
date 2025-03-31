@@ -23,7 +23,10 @@ registered_models = client.search_registered_models()
 list_of_models=[]
 # Print the names of the models
 for model in registered_models:
-    print(list_of_models.append(model.name))
+    print(list_of_models.append(model.name)) #append modifica la lista en el lugar y devuelve None, por eso list_of_models termina siendo una lista de None.
+# --------------------
+# list_of_models = [model.name for model in registered_models]
+# print("Modelos registrados encontrados:", list_of_models)
 
 # Crear una instancia de FastAPI
 app = FastAPI()

@@ -65,7 +65,6 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR}/plugins:/opt/airflow/plugins
-    - ${AIRFLOW_PROJ_DIR}/files:/opt/airflow/files
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -399,7 +398,7 @@ services:
     build: ./api-inference
     container_name: api_service
     ports:
-      - "8989:8989"
+      - "8503:8989"
     #volumes:
     #  - './Airflow/files:/api/data'
     # Comando para ejecutar la API con Uvicorn
