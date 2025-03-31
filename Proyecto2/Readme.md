@@ -96,9 +96,8 @@ Se creo un Bucket llamado mlflows3
 
 ## 5. Ejecutar DAG desde la UI de Airflow
 
-![airflow](airflow.png)
+Decidimos guardar los datos en una base de datos relacional de MySQL.
 
-Decidimos gaurdar los datos en una base de datos relacional de MySQL.
 Como primer task en el Dag garantizamso que la base de datos este vacía. Como se muestra a continuación:
 
 ![Truncate-dag](Truncate-dag.png)
@@ -120,6 +119,9 @@ La cuarta, quinta y sexta Task es donde se realiza el entrenamiento de los model
 
 ![alt text](image-3.png)
 
+Finalmente, ejecutamos el DAG y esperamos a que termine la ejecución (El task train_gradient_boosting se demoró tres horas en terminar)
+
+![airflow](airflow.png)
 
 ## 6. Revisión de experimentos y registro de modelos en MLFlow
 
