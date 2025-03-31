@@ -398,7 +398,7 @@ services:
     build: ./api-inference
     container_name: api_service
     ports:
-      - "8503:8989"
+      - "8989:8989"
     #volumes:
     #  - './Airflow/files:/api/data'
     # Comando para ejecutar la API con Uvicorn

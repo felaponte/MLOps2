@@ -65,23 +65,80 @@ git clone https://github.com/felaponte/MLOps2.git
 cd MLOps2
 cd Proyecto2
 ```
-## 2. Construir y levantar lso servicios
+## 2. Declarar variables de entorno para que funcione Airflow
+
+Ejecutar en terminal:
+
+```
+echo -e "AIRFLOW_UID=$(id -u)" > .env
+echo -e "AIRFLOW_PROJ_DIR=./Airflow" >> .env
+```
+
+## 3. Construir y levantar los servicios
 
 ```
 docker compose up --build
 ```
 Esto desplegará los siguientes servicios:
 
+Airflow (puerto:8080)
+MLflow (puerto:5000)
+MinIO (puerto:9001)
+FastAPI de inferencia (puerto:8989)
+
 ![servicios](Servicios.jpeg)
 
-## 3. Ejecución servicio de API
-Se inicia el servicio que nos va a permitir usar la API
-```
-sudo docker compose up --build ml_service
-```
-Este servicio va a desplegar la API en el puerto 8989 donde vamos a poder hacer la inferencia con los modelos entrenados del paso anterior.
-Esta API reconoce los archivos .pkl que fueron entrenados anteriormente. Si se hubiesen entrenados más modelos la API está en la capacidad de reconocerlos.
-Esta API es necesario escoger el modelo a usar y pasarle los parámetros "Culmen_Length_mm", "Culmen_Depth_mm", "Flipper_Length_mm" para poder realizar la inferencia.
+## 4. Iniciar Sesión y crear bucket en Minio:
 
+![Minio](Minio.png)
+
+Se creo un Bucket llamado mlflows3
+
+## 5. Ejecutar DAG desde la UI de Airflow
+
+![airflow](airflow.png)
+
+Decidimos gaurdar los datos en una base de datos relacional de MySQL.
+Como primer task en el Dag garantizamso que la base de datos este vacía. Como se muestra a continuación:
+
+![Truncate-dag](Truncate-dag.png)
+
+La segunda Task es la ingesta de datos donde nos conectamso a la api donde están disponibles los datos. De forma predeterminada cada batch de la api de los datos se actualizaba cada 5 min, pero lo cambiamos a 5 segundos para mayor rapidez. Y esta segunda task lo que hace es conectarse a esta api cada 3 segundos para intentar tomar un batch de datos nuevo.  Finalmente, después de tomar los 10 batch hacemos la ingesta de datos sin procesar a nuestra base en MySQL.
+
+![Load_data](Load_data.png)
+
+La tercera task hacemos el preprocesamiento de los datos y generamos los datos de entrenamiento y test.
+
+![Preprocesamiento](Preprocesamiento.png)
+
+
+La cuarta, quinta y sexta Task es donde se realiza el entrenamiento de los modelos y el registro de las métricas en MLflow.
+
+![alt text](image-1.png)
+
+![alt text](image-2.png)
+
+![alt text](image-3.png)
+
+
+## 6. Revisión de experimentos y registro de modelos en MLFlow
+
+Se revisar los modelos y experimentos realizados por el DAG en Airflow.
+
+![ExperimentsMlflow](ExperimentsMlflow.png)
+
+Se registran los mejores modelos para random forest y gradient boosting. Se debe etiquetar como "production" para que la API los pueda cargar
+
+![MLflow_Models](MLflow_Models.png)
+
+## 7. Ejecución del servicio de API
+
+En la Api se ven los modelos que pusimos en producción usando MLflow.
+
+![Inferencia_models](Inferencia_models.png)
+
+Luego, se prueba que los modelos que se pusieron en producción realizan correctamente la inferencia.
+
+![Resultado_inferencia](Resultado_inferencia.png)
 
 
