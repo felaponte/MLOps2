@@ -392,6 +392,7 @@ services:
 
 #----------------------------------------------------------------------------------------------------------------------------------------------------------------       
   api_service:
+    image: s4g0/locust_pruebas:inference 
     build: ./api-inference
     container_name: api_service
     ports:
@@ -402,6 +403,7 @@ services:
     command: ["uv","run","uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8989"]
     networks:
       - my_network
+    
     
 #--------------------    
 # Names our volume
