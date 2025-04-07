@@ -68,9 +68,8 @@ services:
   api_service:
     image: s4g0/locust_pruebas:inference 
     build: ./api-inference
-    container_name: api_service
-    ports:
-      - "8989:8989"
+    #ports:
+    #  - "8989:8989"
     #volumes:
     #  - './Airflow/files:/api/data'
     # Comando para ejecutar la API con Uvicorn
@@ -79,12 +78,12 @@ services:
       - my_network
     deploy:
       mode: replicated
-      replicas: 1
+      replicas: 6
       
       resources:
         limits:
           cpus: '1'
-          memory: 500M
+          memory: 1500M
         reservations:
           cpus: '0.25'
           memory: 200M
