@@ -206,4 +206,4 @@ Como con 2 y 3 replicas los request por segundo aumentaron, esta vez alrededor d
 
 * 6 replicas / 1CPU / 1.5GB
 
-Siguió en aumento los request por segundo pero ya no de manera lineal, esta vez ha subido alrededor de 22-23. La memoria en uso también disminuyo pero esta vez se encuentra alrededor de  600MB 
+Siguió en aumento los request por segundo pero ya no de manera lineal, esta vez ha subido alrededor de 22-23. La memoria en uso también disminuyo pero esta vez se encuentra alrededor de  600MB
