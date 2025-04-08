@@ -6,7 +6,7 @@ Este taller consiste en realizar pruebas de carga con Locust sobre una API de in
 ## Estructura del Proyecto
 
 ```
-7-LOCUST/
+7-Locust/
 |
 ├── Airflow/                          # DAGs y configuración de Airflow
 │   ├── dags/
@@ -81,7 +81,7 @@ Se clona el repositorio
 ```
 git clone https://github.com/felaponte/MLOps2.git
 cd MLOps2
-cd 7-LOCUST
+cd 7-Locust
 ```
 ## 2. Creación de la Imagen y Cuenta en Docker Hub
 Se crea una cuenta en Docker Hub. 
