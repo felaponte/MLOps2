@@ -145,7 +145,7 @@ resources:
     memory: 200M
 ```
 
-## 9. Resultados de las pruebas
+## 10. Resultados de las pruebas
 
 A continuación se muestran los resultados visuales obtenidos con diferentes configuraciones de recursos y réplicas:
 
