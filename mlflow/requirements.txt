@@ -1,0 +1,8 @@
+awscli
+boto3
+pymysql
+sqlalchemy
+cryptography
+mlflow
+numpy==1.24.3
+psutil==5.9.5
