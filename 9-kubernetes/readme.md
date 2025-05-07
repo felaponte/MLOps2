@@ -137,6 +137,6 @@ Desplegado en la máquina con IP 10.43.101.177
 
 ## Video para desarrollo del proyecto
 
-[text](https://youtu.be/9bdy6M_IM0Y)
+[video](https://youtu.be/9bdy6M_IM0Y)
 
 
