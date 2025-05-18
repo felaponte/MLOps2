@@ -28,7 +28,7 @@ jobs:
 
       - name: Build and push API image
         run: |
-          docker build -t felaponte/mlops-api:${{ env.TAG }} ./10-CI_CD/api
+          docker build -t felaponte/mlops-api:${{ env.TAG }} ./10-CI_CD/api/app
           docker push felaponte/mlops-api:${{ env.TAG }}
 
       - name: Build and push LoadTester image
