@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+
+  api-service:
+    build:
+      context: ./api/app
+    container_name: api-service
+    ports:
+      - "8989:8989"
+    restart: unless-stopped
+
+  loadtester-service:
+    build:
+      context: ./loadtester
+    container_name: loadtester-service
+    depends_on:
+      - api-service
+    restart: unless-stopped
