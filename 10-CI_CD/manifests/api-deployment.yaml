@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: felaponte/mlops-api:v2
+          image: felaponte/mlops-api
           ports:
             - containerPort: 8989
 
