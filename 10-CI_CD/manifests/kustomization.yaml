@@ -16,6 +16,6 @@ resources:
 
 images:
   - name: felaponte/mlops-api
-    newTag: v007
+    newTag: v009
   - name: felaponte/mlops-loadtester
-    newTag: v007
+    newTag: v009
