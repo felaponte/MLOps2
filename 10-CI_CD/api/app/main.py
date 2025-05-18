@@ -41,7 +41,7 @@ async def predict(data: InputData):
         #Uso de modelo elegido
         model = joblib.load("model.pkl")
         if model is None:
-            raise HTTPException(status_code=404, detail=f"Modelo '{model}' no disponible. ")
+            raise HTTPException(status_code=404, detail=f"Modelo '{model}' no disponible.")
 
         df = pd.DataFrame([data.dict()])
             # Renombrar columnas para que coincidan con `train.py`
