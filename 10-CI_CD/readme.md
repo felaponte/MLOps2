@@ -68,7 +68,7 @@ Diseñar e implementar una arquitectura **CI/CD con GitOps** para desplegar una 
 
 ### 1. Entrenar el modelo
 
-`GitHub Actions` entrena automáticamente el modelo desde el archivo `train_model.py` y guarda el archivo `model.pkl`.
+- `GitHub Actions` entrena automáticamente el modelo desde el archivo `train_model.py` y guarda el archivo `model.pkl`.
 - `Argo CD` sincroniza automáticamente los manifiestos Kubernetes desde GitHub.
 
 ### 2. Construir y subir imágenes Docker
@@ -100,8 +100,8 @@ sudo microk8s kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpa
 ```
 sudo microk8s kubectl port-forward svc/grafana -n default 3000:3000
 ```
-Accede en: http://localhost:3000
-Dashboard muestra el tráfico generado por loadtester.
+- Accede en: http://localhost:3000
+- Dashboard muestra el tráfico generado por loadtester.
 
 ### Endpoints de la API
 
