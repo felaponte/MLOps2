@@ -28,7 +28,7 @@ class InputData(BaseModel):
 # Ruta de prueba
 @app.get("/")
 def home():
-    return {"message": "¡API de predicción de pingüinos en funcionamiento!"}
+    return {"message": "¡API de predicción de pingüinos en funcionamiento!   "}
 
 # Ruta para hacer predicciones
 @app.post("/predict")
