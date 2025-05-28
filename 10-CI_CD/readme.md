@@ -135,7 +135,7 @@ sudo microk8s kubectl port-forward svc/grafana -n default 3000:3000
 
 ### 5. Endpoints disponibles en la API
 
-Una vez desplegada la API, se peuden consumir los siguientes endpoints:
+Una vez desplegada la API, se pueden consumir los siguientes endpoints:
 
 - `POST /predict` para inferencia usando el modelo (model.pkl)
 - `GET /metrics` para exponer métricas de Prometheus (predict_latency_seconds)
