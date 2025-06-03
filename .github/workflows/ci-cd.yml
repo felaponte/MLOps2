@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Proyecto Pipeline
 
 on:
   push:
@@ -26,19 +26,26 @@ jobs:
         id: extract_tag
         run: echo "TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
-      - name: Build and push API image
+      - name: Build and push mlflow-service image
         run: |
-          docker build -t felaponte/mlops-api:${{ env.TAG }} ./10-CI_CD/api/app
-          docker push felaponte/mlops-api:${{ env.TAG }}
+          docker build -t s4g0/mlflow-service:${{ env.TAG }} ./9-kubernetes/mlflow
+          docker push s4g0/mlflow-service:${{ env.TAG }}
 
-      - name: Build and push LoadTester image
+      - name: Build and push api-service image
         run: |
-          docker build -t felaponte/mlops-loadtester:${{ env.TAG }} ./10-CI_CD/loadtester
-          docker push felaponte/mlops-loadtester:${{ env.TAG }}
+          docker build -t s4g0/api-service:${{ env.TAG }} ./9-kubernetes/api-inference
+          docker push s4g0/api-service:${{ env.TAG }}
 
-      - name: Update Kustomization tag
+      - name: Build and push streamlit image
         run: |
-          sed -i "s/newTag: .*/newTag: ${{ env.TAG }}/" ./10-CI_CD/manifests/kustomization.yaml
+          docker build -t s4g0/streamlit:${{ env.TAG }} ./9-kubernetes/streamlit
+          docker push s4g0/streamlit:${{ env.TAG }}
+
+      - name: Update Kustomization image tags
+        run: |
+          sed -i "s|name: s4g0/mlflow-service.*|name: s4g0/mlflow-service\n    newTag: ${{ env.TAG }}|" ./9-kubernetes/komposefiles/kustomization.yaml
+          sed -i "s|name: s4g0/api-service.*|name: s4g0/api-service\n    newTag: ${{ env.TAG }}|" ./9-kubernetes/komposefiles/kustomization.yaml
+          sed -i "s|name: s4g0/streamlit.*|name: s4g0/streamlit\n    newTag: ${{ env.TAG }}|" ./9-kubernetes/komposefiles/kustomization.yaml
 
       - name: Commit and push changes
         env:
@@ -46,6 +53,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add ./10-CI_CD/manifests/kustomization.yaml
+          git add ./9-kubernetes/komposefiles/kustomization.yaml
           git commit -m "Update image tags to ${{ env.TAG }}"
           git push https://x-access-token:${GH_PAT}@github.com/felaponte/MLOps2.git HEAD:main
